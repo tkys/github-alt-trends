@@ -54,14 +54,22 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          # Check if there are changes in the docs directory
-          # Check if index.html exists and has changes
-          if [ -f docs/index.html ] && ! git diff --quiet docs/index.html; then
-            # Add specific files to ensure they are tracked
+          # Always try to add the generated files if they exist
+          if [ -f docs/index.html ]; then
+            echo "Adding docs/index.html and docs/style.css to staging area..."
             git add docs/index.html docs/style.css
+          else
+            echo "docs/index.html not found. Skipping add."
+            # Exit successfully if the main script didn't produce output
+            exit 0
+          fi
+
+          # Check if there are staged changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            echo "Changes detected. Committing and pushing..."
             git commit -m "Update alternative trends data (`date -u`)"
             git push
-          else
-            echo "No changes to commit."
           fi
         shell: bash
