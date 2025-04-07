@@ -24,10 +24,10 @@
                         <p class="description-ja">🇯🇵 {{ repo.description_ja }}</p>
                         {% endif %}
                         <div class="meta">
-                            <span class="language">Language: {{ repo.language or 'N/A' }}</span>
-                            <span class="stars">Stars: {{ repo.stars }}</span>
-                            <span class="stars-growth">Stars (Last 7d): +{{ repo.stars_last_7_days }}</span>
-                            <span class="contributors">Contributors: {{ repo.contributors }}</span>
+                            <span class="language">💻 {{ repo.language or 'N/A' }}</span>
+                            <span class="stars">⭐ {{ repo.stars }}</span>
+                            <!-- <span class="stars-growth">📈 +{{ repo.stars_last_7_days }}</span>  Placeholder, so commented out -->
+                            <span class="contributors">👥 {{ repo.contributors }}</span>
                             {% if repo.topics %}
                             <div class="topics">
                                 Topics:

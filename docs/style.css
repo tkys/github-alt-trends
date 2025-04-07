@@ -43,11 +43,16 @@ main {
 
 .repo-item {
     background: #fff;
-    border: 1px solid #ddd;
-    margin-bottom: 1.5rem;
-    padding: 1.5rem;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #e1e4e8; /* Lighter border */
+    margin-bottom: 1rem; /* Slightly smaller margin */
+    padding: 1rem 1.25rem; /* Adjust padding */
+    border-radius: 6px; /* Slightly more rounded */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06); /* Softer shadow */
+    transition: box-shadow 0.2s ease-in-out; /* Add hover effect */
+}
+
+.repo-item:hover {
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1); /* Slightly raise on hover */
 }
 
 .repo-item h2 {
@@ -64,9 +69,18 @@ main {
     text-decoration: underline;
 }
 
-.repo-item .description {
-    margin-bottom: 1rem;
-    color: #555;
+.repo-item .description,
+.repo-item .description-ja { /* Apply to both descriptions */
+    margin-top: 0.5rem; /* Space between title and description */
+    margin-bottom: 0.75rem; /* Space below description */
+    color: #586069; /* GitHub's secondary text color */
+    font-size: 0.9rem;
+}
+
+.repo-item .description-ja {
+    margin-top: 0.25rem; /* Less space above Japanese translation */
+    font-style: italic;
+    color: #6a737d; /* Slightly lighter */
 }
 
 .repo-item .meta {
@@ -75,9 +89,16 @@ main {
 }
 
 .repo-item .meta span {
-    margin-right: 1rem;
-    display: inline-block; /* Ensure spacing */
-    margin-bottom: 0.5rem; /* Add some bottom margin for spacing */
+    margin-right: 1.25rem; /* Increase spacing between meta items */
+    display: inline-flex; /* Use flex for icon alignment */
+    align-items: center; /* Vertically align icon and text */
+    margin-bottom: 0.5rem;
+}
+
+/* Add specific margin for icons if needed, or adjust span margin */
+.repo-item .meta span svg, /* If using SVG icons */
+.repo-item .meta span::before { /* If using pseudo-elements or emoji */
+    margin-right: 0.3em; /* Space between icon and text */
 }
 
 .repo-item .topics {

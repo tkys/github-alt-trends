@@ -33,11 +33,12 @@ def fetch_trending_repositories():
     # This needs refinement based on how to best discover potential candidates
     # For now, let's use a placeholder query (e.g., pushed within last month)
     # Search for repositories created in the last year with more than 20 stars
-    one_year_ago = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
-    query = f"stars:>20 created:>{one_year_ago}"
+    # Search for repositories created in the last 3 months with more than 20 stars, sorted by stars
+    three_months_ago = (datetime.now() - timedelta(days=90)).strftime('%Y-%m-%d')
+    query = f"stars:>20 created:>{three_months_ago}"
     params = {
         "q": query,
-        "sort": "updated",
+        "sort": "stars", # Sort by stars instead of updated date
         "order": "desc",
         "per_page": 100 # Fetch a decent number to filter through
     }
