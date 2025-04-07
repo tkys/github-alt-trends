@@ -1,0 +1,61 @@
+name: Update GitHub Alternative Trends
+
+on:
+  workflow_dispatch: # Allow manual triggering
+  schedule:
+    # Run daily at 00:00 UTC (9:00 JST)
+    - cron: '0 0 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Allow workflow to commit changes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12' # Match the development environment
+
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+        shell: bash
+
+      - name: Configure uv cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-uv-
+
+      - name: Install dependencies
+        run: uv pip install -r requirements.txt
+        env:
+           # Set uv cache directory if needed, though default might work
+           UV_CACHE_DIR: ~/.cache/uv
+        shell: bash
+
+      - name: Run script to generate trends
+        run: python main.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use the default GitHub token for API calls
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }} # Use secret for OpenAI key
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          # Check if there are changes in the docs directory
+          if ! git diff --quiet docs/; then
+            git add docs/
+            git commit -m "Update alternative trends data (`date -u`)"
+            git push
+          else
+            echo "No changes to commit."
+          fi
+        shell: bash

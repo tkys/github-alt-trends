@@ -1,0 +1,83 @@
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+header p {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+main {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.repo-list {
+    list-style: none;
+    padding: 0;
+}
+
+.repo-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.repo-item h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+.repo-item h2 a {
+    text-decoration: none;
+    color: #0366d6;
+}
+
+.repo-item h2 a:hover {
+    text-decoration: underline;
+}
+
+.repo-item .description {
+    margin-bottom: 1rem;
+    color: #555;
+}
+
+.repo-item .meta {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.repo-item .meta span {
+    margin-right: 1rem;
+    display: inline-block; /* Ensure spacing */
+}
+
+footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 1rem 0;
+    font-size: 0.8rem;
+    color: #777;
+    border-top: 1px solid #eee;
+}

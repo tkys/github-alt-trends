@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Alternative Trends</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>GitHub Alternative Trends</h1>
+        <p>AI/LLM以外の急成長中・個人/小規模開発リポジトリ</p>
+    </header>
+
+    <main>
+        {% if repositories %}
+            <ul class="repo-list">
+                {% for repo in repositories %}
+                    <li class="repo-item">
+                        <h2><a href="{{ repo.url }}" target="_blank" rel="noopener noreferrer">{{ repo.name }}</a></h2>
+                        <p class="description">{{ repo.description }}</p>
+                        <div class="meta">
+                            <span class="language">Language: {{ repo.language or 'N/A' }}</span>
+                            <span class="stars">Stars: {{ repo.stars }}</span>
+                            <span class="stars-growth">Stars (Last 7d): +{{ repo.stars_last_7_days }}</span>
+                            <span class="contributors">Contributors: {{ repo.contributors }}</span>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>現在、表示できるリポジトリはありません。</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>Last updated: {{ last_updated }}</p>
+    </footer>
+</body>
+</html>
