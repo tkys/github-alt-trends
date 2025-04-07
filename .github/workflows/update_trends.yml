@@ -56,7 +56,7 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           # Check if there are changes in the docs directory
           # Check if index.html exists and has changes
-          if [ -f docs/index.html ] &amp;&amp; ! git diff --quiet docs/index.html; then
+          if [ -f docs/index.html ] && ! git diff --quiet docs/index.html; then
             # Add specific files to ensure they are tracked
             git add docs/index.html docs/style.css
             git commit -m "Update alternative trends data (`date -u`)"
