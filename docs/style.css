@@ -24,6 +24,12 @@ header p {
     font-size: 0.9rem;
 }
 
+header .last-updated {
+    font-size: 0.8rem;
+    color: #ccc; /* Lighter color in header */
+    margin-top: 0.2rem;
+}
+
 main {
     max-width: 800px;
     margin: 2rem auto;
@@ -71,7 +77,26 @@ main {
 .repo-item .meta span {
     margin-right: 1rem;
     display: inline-block; /* Ensure spacing */
+    margin-bottom: 0.5rem; /* Add some bottom margin for spacing */
 }
+
+.repo-item .topics {
+    margin-top: 0.75rem; /* Add space above topics */
+    font-size: 0.8rem;
+    color: #444;
+}
+
+.topic-tag {
+    display: inline-block;
+    background-color: #eef;
+    color: #0366d6;
+    padding: 0.2em 0.6em;
+    margin-right: 0.4em;
+    margin-bottom: 0.4em; /* Allow wrapping */
+    border-radius: 3px;
+    font-size: 0.9em; /* Slightly smaller than meta text */
+}
+
 
 footer {
     text-align: center;

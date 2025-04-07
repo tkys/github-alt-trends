@@ -10,6 +10,7 @@
     <header>
         <h1>GitHub Alternative Trends</h1>
         <p>AI/LLM以外の急成長中・個人/小規模開発リポジトリ</p>
+        <p class="last-updated">Last updated: {{ last_updated }}</p>
     </header>
 
     <main>
@@ -19,11 +20,22 @@
                     <li class="repo-item">
                         <h2><a href="{{ repo.url }}" target="_blank" rel="noopener noreferrer">{{ repo.name }}</a></h2>
                         <p class="description">{{ repo.description }}</p>
+                        {% if repo.description_ja and repo.description_ja != repo.description %}
+                        <p class="description-ja">🇯🇵 {{ repo.description_ja }}</p>
+                        {% endif %}
                         <div class="meta">
                             <span class="language">Language: {{ repo.language or 'N/A' }}</span>
                             <span class="stars">Stars: {{ repo.stars }}</span>
                             <span class="stars-growth">Stars (Last 7d): +{{ repo.stars_last_7_days }}</span>
                             <span class="contributors">Contributors: {{ repo.contributors }}</span>
+                            {% if repo.topics %}
+                            <div class="topics">
+                                Topics:
+                                {% for topic in repo.topics %}
+                                    <span class="topic-tag">{{ topic }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
                     </li>
                 {% endfor %}
@@ -34,7 +46,7 @@
     </main>
 
     <footer>
-        <p>Last updated: {{ last_updated }}</p>
+        <!-- Footer content can go here if needed -->
     </footer>
 </body>
 </html>

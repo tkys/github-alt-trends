@@ -32,8 +32,9 @@ def fetch_trending_repositories():
     # Consider searching based on creation date, update date, or specific topics
     # This needs refinement based on how to best discover potential candidates
     # For now, let's use a placeholder query (e.g., pushed within last month)
-    one_month_ago = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
-    query = f"pushed:>{one_month_ago}"
+    # Search for repositories created in the last year with more than 20 stars
+    one_year_ago = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
+    query = f"stars:>20 created:>{one_year_ago}"
     params = {
         "q": query,
         "sort": "updated",
@@ -171,14 +172,8 @@ def filter_repositories(repositories):
         stars_gained = details.get("stars_last_7_days", 0)
         contributors = details.get("contributors_count", 999)
 
-        # Adjust or remove this check as 'stars_last_7_days' is a placeholder
-        # Example: Replace with a check on total stars and creation date if desired
-        # For now, we comment it out as the value is not reliable
-        # if stars_gained < MIN_STARS_GAINED_LAST_7_DAYS:
-        #     print(f"  - Excluded by stars gained: {stars_gained} < {MIN_STARS_GAINED_LAST_7_DAYS}")
-        #     continue
-        # print(f"  - Passed stars gained filter ({stars_gained}).")
-        print(f"  - Skipping stars gained filter (value is placeholder).") # Indicate skipping
+        # Star count filtering is now handled by the initial GitHub API query (stars:>20)
+        # The 'stars_last_7_days' logic remains complex and is not implemented here.
 
         if contributors > MAX_CONTRIBUTORS:
             print(f"  - Excluded by contributors: {contributors} > {MAX_CONTRIBUTORS}")
@@ -201,14 +196,23 @@ def filter_repositories(repositories):
 
         # If all filters passed
         print(f"  - Repository PASSED all filters: {repo.get('html_url', 'N/A')}")
+
+        # Translate description if client is available
+        original_description = repo.get("description", "No description provided.")
+        translated_description = original_description
+        if client:
+             translated_description = translate_text_with_llm(client, original_description)
+
         filtered_repos.append({
             "name": repo.get("name", "Unknown"),
             "url": repo.get("html_url", "#"),
-            "description": repo.get("description", "No description provided."),
+            "description": original_description,
+            "description_ja": translated_description, # Add Japanese description
             "language": repo.get("language"),
             "stars": repo.get("stargazers_count"),
             "stars_last_7_days": stars_gained, # Add details used for filtering
-            "contributors": contributors
+            "contributors": contributors,
+            "topics": details.get("topics", []) # Add topics here
         })
 
     print(f"\nFiltering complete. Found {len(filtered_repos)} matching repositories.")
@@ -265,10 +269,35 @@ def check_ai_related_with_llm(client, repo):
         print(f"    - Error during LLM check for {repo_name}: {e}")
         return False # Default to not excluding if LLM check fails
 
+def translate_text_with_llm(client, text):
+    """Uses LLM to translate text to Japanese."""
+    if not client or not text:
+        return text # Return original text if no client or text
+
+    print(f"    - Translating description (first ~100 chars): {text[:100]}...")
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant that translates English text to Japanese."},
+                {"role": "user", "content": f"Translate the following GitHub repository description to Japanese:\n\n{text}"}
+            ],
+            temperature=0.7,
+            max_tokens=200 # Adjust token limit as needed
+        )
+        translated_text = response.choices[0].message.content.strip()
+        print(f"    - Translation: {translated_text[:100]}...")
+        return translated_text
+    except Exception as e:
+        print(f"    - Error during translation: {e}")
+        return text # Return original text on error
+
+
 # --- HTML Generation ---
 def generate_html(repositories):
     """Generates the static HTML file from a template."""
     if not os.path.exists(TEMPLATE_DIR):
+
         print(f"Error: Template directory '{TEMPLATE_DIR}' not found.")
         return
     if not os.path.exists(OUTPUT_DIR):
