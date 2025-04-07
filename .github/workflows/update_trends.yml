@@ -45,7 +45,7 @@ jobs:
         shell: bash
 
       - name: Run script to generate trends
-        run: python main.py
+        run: uv run python main.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use the default GitHub token for API calls
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }} # Use secret for OpenAI key
